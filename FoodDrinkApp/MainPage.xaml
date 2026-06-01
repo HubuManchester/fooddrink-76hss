@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:FoodDrinkApp.Models"
+             x:Class="FoodDrinkApp.MainPage"
+             Title="NutriBite">
+
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" StrokeThickness="0" Padding="24,30,24,20" BackgroundColor="Transparent">
+            <VerticalStackLayout Spacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="NutriBite" FontSize="36" FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" 
+                           SemanticProperties.HeadingLevel="Level1" />
+                    <Label Text="Your smart nutritional companion" FontSize="15" TextColor="{StaticResource Secondary}" />
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Border StrokeShape="RoundRectangle 12" StrokeThickness="1" 
+                            Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}" 
+                            BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#1E293B}" Padding="0">
+                        <SearchBar x:Name="SearchFoodBar"
+                                   Placeholder="Search foods or tags..."
+                                   TextChanged="OnSearchTextChanged"
+                                   SearchButtonPressed="OnSearchButtonPressed"
+                                   SemanticProperties.Hint="Search the food and drink list" />
+                    </Border>
+                    <Button Grid.Column="1" Text="Add" Clicked="OnAddClicked" SemanticProperties.Hint="Add a new record" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <RefreshView Grid.Row="1" x:Name="FoodRefreshView" Refreshing="OnRefreshing">
+            <CollectionView x:Name="FoodCollection" Margin="24,0,24,0" SelectionMode="None" EmptyView="No matching records found.">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:FoodItem">
+                        <Border StrokeShape="RoundRectangle 16" StrokeThickness="1" 
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark=#1E293B}"
+                                Padding="16" Margin="0,0,0,4">
+                            <Border.Shadow>
+                                <Shadow Brush="{AppThemeBinding Light=#000000, Dark=#000000}" Offset="0,4" Radius="10" Opacity="0.05" />
+                            </Border.Shadow>
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="8" ColumnSpacing="12">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="18" FontAttributes="Bold" />
+                                <Border Grid.Row="0" Grid.Column="1" StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#FFF7ED, Dark=#312316}" Padding="10,4">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding CaloriesLabel}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Accent}" />
+                                </Border>
+
+                                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Description}" FontSize="14" TextColor="{StaticResource Secondary}" LineBreakMode="TailTruncation" MaxLines="2" />
+
+                                <Label Grid.Row="2" Grid.Column="0" Text="{Binding MacroSummary}" FontSize="13" TextColor="{StaticResource SuccessGreen}" VerticalOptions="Center" />
+                                <Button Grid.Row="2" Grid.Column="1" Text="Details" Padding="16,0" HeightRequest="36" FontSize="13"
+                                        CommandParameter="{Binding Id}" Clicked="OnDetailsClicked" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

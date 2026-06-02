@@ -1,58 +1,53 @@
-# 食光营养助手
+# NutriBite 
+**A Cross-Platform Nutritional Tracker and Meal Logger**
 
-食光营养助手是一个基于 .NET MAUI 的“食品与饮品”课程项目应用。应用可以记录食品和饮品，展示营养摘要，验证用户输入，并演示移动设备硬件功能。
+##  Author Information
+* **Author Name:Li Wenhui
+* **Student ID:21906402
+* **Module:** 6G6Z0014 - Mobile Computing
+* **Assessment:** 1CWK100 - Developing a Cross-Platform Mobile App
 
-## 主要功能
+##  App Overview
+NutriBite is a premium, cross-platform mobile application developed using **C# and .NET MAUI**. Built strictly around the "Food and Drink" theme, it serves as a smart nutritional tracker that allows users to log their daily meals, view detailed macronutrient breakdowns (Calories, Protein, Carbs, Fat), and manage dietary restrictions (allergy notes).
 
-- 食品和饮品列表，支持搜索和详情页。
-- 添加记录表单，检查必填项和营养数值。
-- 使用相机拍摄食品照片并预览。
-- 使用定位记录用餐或购买地点。
-- 使用文字转语音朗读营养摘要和帮助内容。
-- 使用震动与触觉反馈提供操作提醒。
-- 支持主题切换和大字体模式。
-- 包含语义标签、屏幕阅读器播报和清晰的验证提示。
+The application strictly adheres to the **MVVM (Model-View-ViewModel)** architectural pattern and features a highly consistent, custom-built "Modern Culinary" design system. It seamlessly supports both **Android** and **Windows** desktop environments from a single codebase.
 
-## 评分点覆盖
+##  Development Plan & Implemented Features
+To ensure a high-quality product, the development plan focused on delivering robust features across UI/UX, Hardware integration, and API management:
 
-- UI/UX 与无障碍：XAML 页面、底部导航、一致的视觉风格、深色模式、语义描述和屏幕阅读器播报。
-- 移动硬件：相机、定位、文字转语音、震动和触觉反馈。
-- 功能完整性：列表、搜索、添加、详情、设置和硬件演示流程。
-- 验证与错误处理：必填项检查、数字检查、权限错误和硬件不可用提示。
-- 代码质量：模型和服务分离、命名清晰、可复用的目录服务，以及范围清晰的页面代码。
-- 部署：面向 Android 和 Windows 的 .NET MAUI 跨平台应用。
-- GitHub 使用：建议持续提交，例如 `添加食品列表`、`实现硬件页面`、`添加输入验证`。
+### 1. UI/UX Design & Accessibility
+* **Custom Styling:** Extensive use of XAML Resource Dictionaries to create a consistent "Modern Culinary" aesthetic.
+* **Dynamic Theming:** Full support for system-level **Light and Dark mode** transitions.
+* **Micro-interactions:** Integrated `VisualStateManager` for smooth button scaling animations.
+* **Accessibility:** Adheres to accessibility standards. UI uses relative layouts to support dynamic system font scaling. High-contrast colors are maintained in both themes.
 
-## 运行方式
+### 2. Native Hardware Integration
+NutriBite deeply integrates with multiple mobile hardware features:
+* **Camera (MediaPicker):** Captures real-time photos of meals.
+* **Location & Geocoding:** Fetches device coordinates and reverse-engineers them into human-readable locations where the meal was logged.
+* **Haptic Feedback:** Provides tactile vibration responses during critical user actions (e.g., saving data).
+* **Text-to-Speech (TTS):** Audibly reads out the complete nutritional summary and allergy warnings for visually impaired users.
 
-使用安装了 .NET MAUI 工作负载的 Visual Studio 2022 打开 `FoodDrinkApp.csproj` 或 `FoodDrinkApp.sln`。
+### 3. Advanced Validation & Error Handling
+* **Input Validation:** Prevents form submission if required fields are empty or if numerical fields (e.g., calories) contain invalid/negative values.
+* **Offline Fault Tolerance:** The app communicates with a cloud RESTful API (`mockapi.io`). If the network connection drops (e.g., Airplane mode), the service layer catches the `HttpRequestException` and gracefully falls back to a local offline dataset without crashing.
 
-推荐演示目标：
+##  How to Run the App (Important Setup)
 
-- Android 模拟器
-- Windows Machine
+If you intend to compile and run this application, please ensure the following environment setups:
 
-Windows 构建命令：
+### 1. Cloud Database (MockAPI) Configuration
+The app relies on `mockapi.io` for cloud storage. Before running, you must configure the endpoint:
+1. Open `Services/MockApiConfig.cs`.
+2. Insert your specific MockAPI endpoint URL into the `EndpointUrl` constant string. 
+*(Note: If no URL is provided, the app will safely fallback to local hardcoded data without crashing).*
 
-```powershell
-dotnet build .\FoodDrinkApp.csproj -f net9.0-windows10.0.19041.0
-```
+### 2. Android Emulator Hardware Setup
+To properly test the hardware features on an Android Emulator:
+* **Location:** Open the emulator's *Extended Controls (...) -> Location*, search for a city, and click **"Set Location"**. Otherwise, the Geolocation API may timeout waiting for initial GPS data.
+* **Camera:** The default emulator camera will display a virtual 3D room. Simply press the capture button and then the checkmark (✓) to confirm the hardware call.
+* **Audio:** Ensure the emulator's media volume is turned up to hear the Text-to-Speech functionality.
 
-Android 构建命令：
-
-```powershell
-dotnet build .\FoodDrinkApp.csproj -f net9.0-android
-```
-
-本项目通过 `Directory.Build.props` 将构建输出放到 `C:\MauiBuild\NutriTrack\`，用于规避 Android 打包工具在中文路径下的 `assets` 路径问题。
-
-## 录屏演示清单
-
-- 说明“食品与饮品”主题和“食光营养助手”的应用概念。
-- 展示搜索、详情页和添加新记录。
-- 演示不填必填项、输入非法数字时的验证提示。
-- 演示相机、定位、文字转语音、震动和触觉反馈。
-- 展示深色模式和大字体模式。
-- 展示关键代码文件：模型、服务、页面和 Android 权限配置。
-- 展示 Android 和 Windows 部署效果。
-- 展示 GitHub 提交历史和 README。
+### 3. Deployment
+* **Android:** Tested on Android API 31+.
+* **Windows (Desktop):** The app is configured with specific window dimensions in `App.xaml.cs` to ensure it acts as a premium desktop widget. If updating the Windows build, ensure any previously cached versions of the app are uninstalled from the Windows Start Menu before rebuilding.
